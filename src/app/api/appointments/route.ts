@@ -25,10 +25,17 @@ export async function POST(request: Request) {
 export async function GET() {
   try {
     const appointments = await prisma.appointment.findMany({
-      orderBy: { date: 'asc' },
+      orderBy: {
+        date: 'asc'
+      }
     });
+
     return NextResponse.json(appointments);
   } catch (error) {
-    return NextResponse.json({ error: 'Error al obtener las citas' }, { status: 500 });
+    console.error('Error fetching appointments:', error);
+    return NextResponse.json(
+      { error: 'Error al obtener las citas' },
+      { status: 500 }
+    );
   }
 } 

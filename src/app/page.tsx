@@ -24,6 +24,13 @@ export default function Home() {
           </button>
           
           <button
+            onClick={() => router.push('/view-appointments')}
+            className="w-full bg-green-600 text-white py-3 px-6 rounded-xl text-lg font-semibold hover:bg-green-700 transition-colors"
+          >
+            Ver Citas
+          </button>
+          
+          <button
             onClick={() => router.push('/login')}
             className="w-full bg-gray-700 text-white py-3 px-6 rounded-xl text-lg font-semibold hover:bg-gray-600 transition-colors"
           >
