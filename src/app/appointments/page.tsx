@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function AppointmentsPage() {
@@ -14,6 +14,24 @@ export default function AppointmentsPage() {
     service: 'Corte de Cabello'
   });
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
+  const [minDate, setMinDate] = useState('');
+
+  // Actualizar la fecha mínima cada minuto
+  useEffect(() => {
+    const updateMinDate = () => {
+      const today = new Date().toISOString().split('T')[0];
+      setMinDate(today);
+    };
+
+    // Actualizar inmediatamente
+    updateMinDate();
+
+    // Configurar el intervalo para actualizar cada minuto
+    const interval = setInterval(updateMinDate, 60000);
+
+    // Limpiar el intervalo cuando el componente se desmonte
+    return () => clearInterval(interval);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -129,6 +147,7 @@ export default function AppointmentsPage() {
               type="date"
               id="date"
               required
+              min={minDate}
               value={formData.date}
               onChange={(e) => setFormData({ ...formData, date: e.target.value })}
               className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-black dark:text-white dark:bg-gray-700 text-sm"
