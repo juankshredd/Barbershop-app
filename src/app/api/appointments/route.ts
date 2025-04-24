@@ -4,6 +4,21 @@ import prisma from '@/lib/prisma';
 export async function POST(request: Request) {
   try {
     const data = await request.json();
+    
+    // Validar fecha y hora
+    const selectedDate = new Date(data.date);
+    const selectedTime = data.time.split(':');
+    selectedDate.setHours(parseInt(selectedTime[0]), parseInt(selectedTime[1]));
+    
+    const now = new Date();
+    
+    if (selectedDate < now) {
+      return NextResponse.json(
+        { error: 'No se pueden crear citas en fechas u horas pasadas' },
+        { status: 400 }
+      );
+    }
+
     const appointment = await prisma.appointment.create({
       data: {
         name: data.name,
