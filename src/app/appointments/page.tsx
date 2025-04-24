@@ -19,6 +19,21 @@ export default function AppointmentsPage() {
     e.preventDefault();
     setMessage(null);
 
+    // Validar fecha y hora
+    const selectedDate = new Date(formData.date);
+    const selectedTime = formData.time.split(':');
+    selectedDate.setHours(parseInt(selectedTime[0]), parseInt(selectedTime[1]));
+    
+    const now = new Date();
+    
+    if (selectedDate < now) {
+      setMessage({ 
+        type: 'error', 
+        text: 'No se pueden crear citas en fechas u horas pasadas' 
+      });
+      return;
+    }
+
     try {
       const response = await fetch('/api/appointments', {
         method: 'POST',
